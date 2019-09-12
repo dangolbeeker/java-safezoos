@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "zoo")
-public class Zoo
+public class Zoo extends  Auditable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,15 +17,15 @@ public class Zoo
     private String zooname;
 
     @OneToMany(mappedBy = "zoo",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnoreProperties("zoo")
     private List<Telephone> telephones = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "zooanimals",
-               joinColumns = {@JoinColumn(name = "zooid")},
-               inverseJoinColumns = {@JoinColumn(name = "animalid")})
+            joinColumns = {@JoinColumn(name = "zooid")},
+            inverseJoinColumns = {@JoinColumn(name = "animalid")})
     @JsonIgnoreProperties("zoos")
     private List<Animal> animals = new ArrayList<>();
 

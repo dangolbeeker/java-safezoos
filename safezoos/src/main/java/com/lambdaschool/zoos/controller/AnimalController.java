@@ -18,14 +18,14 @@ public class AnimalController
     private AnimalService animalService;
 
     @GetMapping(value = "/animals",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> listAllAnimals()
     {
         return new ResponseEntity<>(animalService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{type}",
-                produces = {"application/json"})
+            produces = {"application/json"})
     public ResponseEntity<?> findAnimalByType(
             @PathVariable
                     String type)
@@ -33,4 +33,10 @@ public class AnimalController
         Animal a = animalService.findAnimalByType(type);
         return new ResponseEntity<>(a, HttpStatus.OK);
     }
+
+//    @GetMapping(value = "/count", produces = {"application/json"})
+//    public ResponseEntity<?> listCountAnimalsInZoo()
+//    {
+//        return new ResponseEntity<>(animalService.getAnimalInZooCount(), HttpStatus.OK);
+//    }
 }
