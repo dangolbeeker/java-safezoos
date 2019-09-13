@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "zoo")
-public class Zoo extends  Auditable
+public class Zoo extends Auditable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,17 +17,16 @@ public class Zoo extends  Auditable
     private String zooname;
 
     @OneToMany(mappedBy = "zoo",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
     @JsonIgnoreProperties("zoo")
     private List<Telephone> telephones = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "zooanimals",
-            joinColumns = {@JoinColumn(name = "zooid")},
-            inverseJoinColumns = {@JoinColumn(name = "animalid")})
-    @JsonIgnoreProperties("zoos")
-    private List<Animal> animals = new ArrayList<>();
+    @OneToMany(mappedBy = "zoo",
+               cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("zoo")
+    private List<ZooAnimals> zooAnimals = new ArrayList<>();
+
 
     public long getZooid()
     {
@@ -59,19 +58,13 @@ public class Zoo extends  Auditable
         this.telephones = telephones;
     }
 
-    public List<Animal> getAnimals()
+    public List<ZooAnimals> getZooAnimals()
     {
-        return animals;
+        return zooAnimals;
     }
 
-    public void setAnimals(List<Animal> animals)
+    public void setZooAnimals(List<ZooAnimals> zooAnimals)
     {
-        this.animals = animals;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Zoo{" + "zooid=" + zooid + ", zooname='" + zooname + '\'' + ", telephones=" + telephones + ", animals=" + animals + '}';
+        this.zooAnimals = zooAnimals;
     }
 }

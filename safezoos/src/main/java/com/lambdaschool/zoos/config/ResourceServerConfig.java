@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter
-        //decides who has access to what based on roles and endpoints
 {
 
     private static final String RESOURCE_ID = "resource_id";
@@ -26,26 +25,20 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
     {
         // http.anonymous().disable();
         http.authorizeRequests()
-                .antMatchers("/",                       // h2
-                        "/h2-console/**",
-                        "/swagger-resources/**",
-                        "/swagger-resources/configuration/ui",
-                        "/swagger-resources/configuration/security",
-                        "/swagger-resource/**",
-                        "/swagger-ui.html",
-                        "/v2/api-docs",
-                        "/webjars/**").permitAll()
-                ///list of endpoints in antMatchers
-                ///../** means all links underneath it accessible
-
-
-                .antMatchers("/users/**", "/quotes/**").authenticated()
-                ///anyone with valid token can go to anything under users and anything under quotes
-                .antMatchers("/roles").hasAnyRole("ADMIN")
-                ///for any endpoint ending in /roles has to have role  ADMIN to access
-                //a regular user would get access denied when attempting to go to ../roles
-
-                .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
+            .antMatchers("/",
+                    "/h2-console/**",
+                    "/swagger-resources/**",
+                    "/swagger-resources/configuration/ui",
+                    "/swagger-resources/configuration/security",
+                    "/swagger-resource/**",
+                    "/swagger-ui.html",
+                    "/v2/api-docs",
+                    "/webjars/**").permitAll()
+                .antMatchers("/users/**").authenticated()
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/zoos/**").hasAnyRole("ADMIN", "ZOODATA", "MGR")
+                .antMatchers("/animals/**").hasAnyRole("ADMIN", "MGR", "ANIMALDATA")
+            .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
 
         http.csrf().disable();
         http.headers().frameOptions().disable();

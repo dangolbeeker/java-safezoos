@@ -16,9 +16,12 @@ public class Animal extends Auditable
 
     private String animaltype;
 
-    @ManyToMany(mappedBy = "animals")
-    @JsonIgnoreProperties("animals")
-    private List<Zoo> zoos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "animal",
+               cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("animal")
+    private List<ZooAnimals> zooAnimals = new ArrayList<>();
+
 
     public long getAnimalid()
     {
@@ -40,19 +43,13 @@ public class Animal extends Auditable
         this.animaltype = animaltype;
     }
 
-    public List<Zoo> getZoos()
+    public List<ZooAnimals> getZooAnimals()
     {
-        return zoos;
+        return zooAnimals;
     }
 
-    public void setZoos(List<Zoo> zoos)
+    public void setZooAnimals(List<ZooAnimals> zooAnimals)
     {
-        this.zoos = zoos;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Animal{" + "animalid=" + animalid + ", animaltype='" + animaltype + '\'' + ", zoos=" + zoos + '}';
+        this.zooAnimals = zooAnimals;
     }
 }

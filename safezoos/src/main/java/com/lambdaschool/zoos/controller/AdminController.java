@@ -1,7 +1,5 @@
 package com.lambdaschool.zoos.controller;
 
-import com.lambdaschool.zoos.model.Zoo;
-import com.lambdaschool.zoos.service.ZooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -63,6 +61,18 @@ public class AdminController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/zoos/{zooid}/animals/{animalid}")
+    public ResponseEntity<?> deleteZooAnimalCombo(
+            @PathVariable("zooid")
+                    long zooid,
+            @PathVariable("animalid")
+                    long animalid)
+    {
+        zooService.deleteZooAnimalCombo(zooid, animalid);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping(value = "/zoos/{zooid}/animals/{animalid}")
     public ResponseEntity<?> saveZooAnimalCombo(HttpServletRequest request,
             @PathVariable("zooid")
@@ -70,7 +80,7 @@ public class AdminController
             @PathVariable("animalid")
                     long animalid)
     {
-//        zooService.saveZooAnimalCombo(zooid, animalid);
+        zooService.saveZooAnimalCombo(zooid, animalid);
 
         // set the location header for the newly created resource
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -78,7 +88,7 @@ public class AdminController
         URI newZooURI = ServletUriComponentsBuilder.fromUriString(request.getServerName() + ":" + request.getLocalPort() + "/zoos/zoos/{zooid}").buildAndExpand(zooid).toUri();
         responseHeaders.setLocation(newZooURI);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.OK);
     }
 
 }
